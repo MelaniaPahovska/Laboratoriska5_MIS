@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:laboratoriska3/model/exam.dart';
 import 'package:laboratoriska3/resources/firestore_methods.dart';
+import 'package:laboratoriska3/screens/calendar_screen.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -172,6 +174,14 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: _addExam,
+          ),
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CalendarScreen()),
+              );
+            },
           ),
         ],
       ),

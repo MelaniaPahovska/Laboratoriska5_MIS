@@ -34,7 +34,9 @@ dependencies:
   firebase_core: ^2.25.4
   flutter:
     sdk: flutter
+  flutter_local_notifications: ^16.3.2
   intl: ^0.19.0
+  table_calendar: ^3.1.0
   uuid: ^4.3.3
 
 dev_dependencies:
