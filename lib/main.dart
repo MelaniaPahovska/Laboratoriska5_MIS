@@ -6,9 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:laboratoriska3/screens/login_screen.dart';
 import 'package:laboratoriska3/screens/auth_screen.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
