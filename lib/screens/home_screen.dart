@@ -109,16 +109,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
 
                   if (result == "success") {
+                    if (exams != []) {
+                      _scheduleNotification(exams.last);
+                    }
+                    setState(() {
+                      exams.add(exams.last);
+                      _selectedDate = null;
+                      _selectedTime = null;
+                    });
                     Navigator.of(context).pop();
                   } else {}
                 } else {}
 
                 _subjectController.clear();
                 fetchExams();
-                setState(() {
-                  _selectedDate = null;
-                  _selectedTime = null;
-                });
               },
             ),
           ],
@@ -161,7 +165,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _scheduleNotification(Exam exam) async {
     // Convert exam time string to DateTime object
     //DateTime examTime = DateFormat('HH:mm').parse(exam.time);
-    DateTime notificationTime = exam.date.subtract(const Duration(minutes: 5));
+    DateTime notificationTime = exam.date.subtract(const Duration(
+      minutes: 5,
+      hours: 1,
+    ));
 
     var androidDetails = const AndroidNotificationDetails(
       'exam_id',
