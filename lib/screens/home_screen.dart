@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:laboratoriska3/model/exam.dart';
 import 'package:laboratoriska3/resources/firestore_methods.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Exam> exams = [];
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirestoreMethods _firestoreMethods = FirestoreMethods();
   String currentUserId = "";
@@ -125,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
   void initState() {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
@@ -136,6 +137,15 @@ class _HomeScreenState extends State<HomeScreen> {
         fetchExams();
       }
     });
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = const IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   void getCurrentUserAndFetchData() {
@@ -146,6 +156,32 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       fetchExams();
     }
+  }
+
+  Future<void> _scheduleNotification(Exam exam) async {
+    // Convert exam time string to DateTime object
+    //DateTime examTime = DateFormat('HH:mm').parse(exam.time);
+    DateTime notificationTime = exam.date.subtract(const Duration(minutes: 5));
+
+    var androidDetails = const AndroidNotificationDetails(
+      'exam_id',
+      'Exam Notifications',
+      channelDescription: 'Notification channel for exam reminders',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    var iOSDetails = IOSNotificationDetails();
+    var platformDetails =
+        NotificationDetails(android: androidDetails, iOS: iOSDetails);
+
+    await flutterLocalNotificationsPlugin.schedule(
+      exam.hashCode,
+      'Exam Reminder',
+      '${exam.name} is scheduled for ${exam.time}',
+      //examTime,
+      notificationTime,
+      platformDetails,
+    );
   }
 
   void fetchExams() {

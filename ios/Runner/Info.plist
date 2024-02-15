@@ -45,5 +45,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+<key>NSCalendarsUsageDescription</key>
+<string>Our app needs access to your calendar to schedule notifications for exams.</string>
+<key>NSNotificationsUsageDescription</key>
+<string>Our app needs to send you notifications for exam reminders.</string>
+
 </dict>
 </plist>

@@ -4,7 +4,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:laboratoriska3/model/exam.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import '../main.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -40,12 +41,59 @@ class _CalendarScreenState extends State<CalendarScreen> {
           if (newExamEvents[examDate] == null) newExamEvents[examDate] = [];
           newExamEvents[examDate]!.add(exam);
         }
+
         setState(() {
           _examEvents = newExamEvents;
         });
       });
     }
   }
+  // void _fetchExams() async {
+  //   if (currentUserId != null) {
+  //     FirebaseFirestore.instance
+  //         .collection('exams')
+  //         .where('uid', isEqualTo: currentUserId)
+  //         .snapshots()
+  //         .listen((snapshot) {
+  //       Map<DateTime, List<Exam>> newExamEvents = {};
+  //       for (var doc in snapshot.docs) {
+  //         Exam exam = Exam.fromSnap(doc);
+  //         DateTime examDate =
+  //             DateTime(exam.date.year, exam.date.month, exam.date.day);
+  //         if (newExamEvents[examDate] == null) newExamEvents[examDate] = [];
+  //         newExamEvents[examDate]!.add(exam);
+  //       }
+  //       for (var doc in snapshot.docs) {
+  //         Exam exam = Exam.fromSnap(doc);
+
+  //         List<String> timeParts = exam.time.split(':');
+  //         int hour = int.parse(timeParts[0]);
+  //         int minute = int.parse(timeParts[1]);
+
+  //         DateTime examDateTime = DateTime(
+  //           exam.date.year,
+  //           exam.date.month,
+  //           exam.date.day,
+  //           hour,
+  //           minute,
+  //         );
+
+  //         if (newExamEvents[examDateTime] == null) {
+  //           newExamEvents[examDateTime] = [];
+  //         }
+  //         newExamEvents[examDateTime]!.add(exam);
+
+  //         // Check if the exam date and time are in the future before scheduling
+  //         if (examDateTime.isAfter(DateTime.now())) {
+  //           scheduleExamNotification(exam);
+  //         }
+  //       }
+  //       setState(() {
+  //         _examEvents = newExamEvents;
+  //       });
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
