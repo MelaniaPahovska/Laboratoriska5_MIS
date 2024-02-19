@@ -7,8 +7,15 @@ import '../model/exam.dart';
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String> uploadExam(String name, DateTime date, String time,
-      String description, List<String> participants) async {
+  Future<String> uploadExam(
+    String name,
+    DateTime date,
+    String time,
+    String description,
+    List<String> participants,
+    double latitude,
+    double longtitude,
+  ) async {
     String res = "Some error occurred";
     try {
       String examId = const Uuid().v1();
@@ -20,6 +27,8 @@ class FirestoreMethods {
         uid: FirebaseAuth.instance.currentUser!.uid,
         examId: examId,
         completed: false,
+        latitude: latitude,
+        longitude: longtitude,
       );
       await _firestore.collection('exams').doc(examId).set(exam.toJson());
       res = "success";

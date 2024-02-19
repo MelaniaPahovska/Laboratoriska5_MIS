@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:laboratoriska3/model/exam.dart';
 import 'package:laboratoriska3/resources/firestore_methods.dart';
 import 'package:laboratoriska3/screens/calendar_screen.dart';
+import 'package:laboratoriska3/screens/location_picker_screen.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirestoreMethods _firestoreMethods = FirestoreMethods();
   String currentUserId = "";
+  double _selectedLatitude = 0.0;
+  double _selectedLongitude = 0.0;
 
   Future<void> _addExam() async {
     final TextEditingController _subjectController = TextEditingController();
@@ -79,6 +84,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   trailing: Icon(Icons.access_time),
                   onTap: () => _selectTime(context),
                 ),
+                ListTile(
+                  title: Text('Избери локација на мапа'),
+                  trailing: Icon(Icons.map),
+                  onTap: () async {
+                    final LatLng? pickedLocation =
+                        await Navigator.of(context).push<LatLng>(
+                      MaterialPageRoute(
+                          builder: (context) => LocationPickerScreen()),
+                    );
+                    if (pickedLocation != null) {
+                      // Update the state with the picked location
+                      setState(() {
+                        _selectedLatitude = pickedLocation.latitude;
+                        _selectedLongitude = pickedLocation.longitude;
+                      });
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -105,7 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     examDateTime,
                     DateFormat('HH:mm').format(examDateTime),
                     "", // Description
-                    [], // Participants
+                    [],
+                    // Participants
+                    _selectedLatitude,
+                    _selectedLongitude,
                   );
 
                   if (result == "success") {

@@ -5,20 +5,22 @@ class Exam {
   final DateTime date;
   final String time;
   final String uid;
-  //final List<String> participants;
   final String examId;
   final String description;
   bool completed;
+  final double latitude;
+  final double longitude;
 
   Exam({
     required this.name,
     required this.date,
     required this.time,
     required this.uid,
-    // required this.participants,
     required this.examId,
     required this.description,
     this.completed = false,
+    required this.latitude,
+    required this.longitude,
   });
 
   static Exam fromSnap(DocumentSnapshot snap) {
@@ -32,6 +34,8 @@ class Exam {
       examId: snapshot["examId"] ?? '',
       description: snapshot["description"] ?? '',
       completed: snapshot["completed"] ?? false,
+      latitude: snapshot["latitude"] ?? '',
+      longitude: snapshot["longitude"] ?? '',
     );
   }
 
@@ -44,5 +48,7 @@ class Exam {
         "examId": examId,
         "description": description,
         "completed": completed,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }
