@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:laboratoriska3/model/exam.dart';
 import 'package:laboratoriska3/resources/firestore_methods.dart';
 import 'package:laboratoriska3/screens/calendar_screen.dart';
+import 'package:laboratoriska3/screens/exam_map.dart';
 import 'package:laboratoriska3/screens/location_picker_screen.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -249,6 +250,17 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => CalendarScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.map_outlined),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => ExamLocationsMapScreen(
+                          exams: exams,
+                        )),
               );
             },
           ),
